@@ -21,7 +21,10 @@ router.post(
   md.checkAccountNameUnique,
   async (req, res, next) => {
     try {
-      const newAccount = await Account.create(req.body);
+      const newAccount = await Account.create({
+        name: req.body.name.trim(),
+        budget: req.body.budget,
+      });
       res.status(201).json(newAccount);
     } catch (err) {
       next(err);
@@ -33,7 +36,6 @@ router.put(
   "/:id",
   md.checkAccountId,
   md.checkAccountPayload,
-  md.checkAccountNameUnique,
   async (req, res, next) => {
     try {
       const updated = await Account.updateById(req.params.id, req.body);
@@ -55,7 +57,9 @@ router.delete("/:id", md.checkAccountId, async (req, res, next) => {
 
 router.use((err, req, res, next) => {
   // eslint-disable-line
-  res.status(err.status || 500).json({ message: err.message });
+  res.status(err.status || 500).json({
+    message: err.message,
+  });
 });
 
 module.exports = router;
