@@ -5,7 +5,7 @@ const getAll = () => {
 };
 
 const getById = (id) => {
-  return db("accounts").where("id", id).first();
+  return db("accounts").where({ id }).first();
 };
 
 const create = async (account) => {
@@ -13,13 +13,15 @@ const create = async (account) => {
   return getById(id);
 };
 
-const updateById = async (id, account) => {
-  await db("accounts").where("id", id).update(account);
-  return getById(id);
+const updateById = (id, changes) => {
+  return db("accounts")
+    .where({ id })
+    .update(changes)
+    .then((count) => (count > 0 ? getById(id) : null));
 };
 
 const deleteById = (id) => {
-  return db("accounts").where("id", id).del();
+  return db("accounts").where({ id }).del();
 };
 
 module.exports = {
