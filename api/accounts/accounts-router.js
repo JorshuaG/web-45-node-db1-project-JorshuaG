@@ -11,7 +11,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.get("/:id", md.checkAccountId, async (req, res, next) => {
+router.get("/:id", md.checkAccountId, (req, res, next) => {
   res.json(req.account);
 });
 
@@ -39,7 +39,7 @@ router.put(
   async (req, res, next) => {
     try {
       const updated = await Account.updateById(req.params.id, req.body);
-      res.json(updated);
+      res.status(200).json(updated);
     } catch (err) {
       next(err);
     }
